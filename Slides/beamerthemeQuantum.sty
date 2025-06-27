@@ -1,0 +1,111 @@
+% beamerthemeQuantum.sty
+% Um tema Beamer para apresentações de Computação Quântica
+% Autor: Gemini (Google AI)
+% Data: 26 de junho de 2025
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeQuantum}[2025/06/26 v1.0 Quantum Theme]
+
+\RequirePackage{tikz}
+\RequirePackage{amsmath, amssymb}
+
+% --- DEFINIÇÃO DAS CORES ---
+\definecolor{QuantumBlue}{RGB}{10, 20, 45}      % Fundo azul escuro
+\definecolor{QubitCyan}{RGB}{0, 255, 255}       % Ciano brilhante para títulos
+\definecolor{EntanglementPurple}{RGB}{170, 85, 255} % Roxo para destaques
+\definecolor{SuperpositionWhite}{RGB}{240, 240, 240} % Branco suave para texto
+
+% --- CONFIGURAÇÃO DAS CORES DO BEAMER ---
+% Estrutura geral
+\setbeamercolor{structure}{fg=QubitCyan}
+
+% Fundo
+\setbeamercolor{background canvas}{bg=QuantumBlue}
+
+% Texto normal
+\setbeamercolor{normal text}{fg=SuperpositionWhite}
+
+% Títulos dos slides
+\setbeamercolor{frametitle}{fg=QubitCyan, bg=QuantumBlue}
+
+% Blocos (exemplo, teorema, etc.)
+\setbeamercolor{block title}{bg=EntanglementPurple, fg=SuperpositionWhite}
+\setbeamercolor{block body}{bg=QuantumBlue!80!black, fg=SuperpositionWhite}
+
+% Rodapé
+\setbeamercolor{footline}{fg=SuperpositionWhite, bg=EntanglementPurple}
+
+% --- TEMPLATES (MODELOS) ---
+
+% Remover símbolos de navegação
+\setbeamertemplate{navigation symbols}{}
+
+% --- TÍTULO DO FRAME (CENTRALIZADO) ---
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.5ex, dp=1ex,center]{frametitle}
+    \insertframetitle
+  \end{beamercolorbox}%
+  \vskip-1.5pt
+  \hrule height 1.5pt \color{EntanglementPurple}
+}
+
+% --- RODAPÉ ---
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.5ex, dp=1ex]{footline}
+    \hspace*{1em}%
+    \insertauthor~\textbar~\insertinstitute%
+    \hfill%
+    \insertdate%
+    \hfill%
+    \insertframenumber{} / \inserttotalframenumber%
+    \hspace*{1em}%
+  \end{beamercolorbox}%
+}
+
+% --- ÍTENS DA LISTA ---
+\setbeamertemplate{itemize items}[diamond]
+\setbeamercolor{itemize item}{fg=QubitCyan}
+\setbeamercolor{enumerate item}{fg=QubitCyan}
+
+% --- PÁGINA DE TÍTULO ---
+\setbeamertemplate{title page}{%
+  \vfill%
+  \begin{center}
+    % Gráfico do Qubit/Átomo
+    \begin{tikzpicture}
+      \draw[QubitCyan, thick] (0,0) circle (1.5cm);
+      \fill[EntanglementPurple] (0,0) circle (0.1cm);
+      \draw[SuperpositionWhite, dashed] (0:1.5cm) arc (0:-180:1.5cm and 0.5cm);
+      \draw[SuperpositionWhite] (0:1.5cm) arc (0:180:1.5cm and 0.5cm);
+      \fill[QubitCyan] (45:1.5cm and 0.5cm) circle (0.08cm);
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    
+    % Título
+    \begin{beamercolorbox}[sep=8pt,center]{}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    
+    \vspace{1cm}
+    
+    % Autor, Instituição, Data
+    \begin{beamercolorbox}[sep=8pt,center]{}
+      {\renewcommand{\and}{\par\vspace{0.2em}}\usebeamerfont{author}\insertauthor\par}
+      \usebeamerfont{institute}\insertinstitute\par
+      \usebeamerfont{date}\insertdate\par
+    \end{beamercolorbox}
+  \end{center}
+  \vfill
+}
+
+% --- ESTILO DOS BLOCOS ---
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\mode<all>

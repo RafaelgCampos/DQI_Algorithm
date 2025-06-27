@@ -1,0 +1,147 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{braket}
+
+% --- USE O TEMA QUANTUM ---
+\usetheme{Quantum}
+
+% --- INFORMAÇÕES DA APRESENTAÇÃO ---
+\title{Otimização de funções em módulo 2 utilizando DQI}
+\subtitle{Algoritmo DQI max-XORSAT}
+\author{Daniel Nocito \and Diogo Vieira \and Rafael Campos}
+\institute{UFRJ}
+\date{02 de Julho de 2025}
+
+\begin{document}
+
+% --- PÁGINA DE TÍTULO ---
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% --- SLIDE DE ROTEIRO ---
+\begin{frame}
+  \frametitle{Roteiro}
+  \tableofcontents
+\end{frame}
+
+\section{Definição do Problema}
+
+% --- SLIDE DEFINIÇÃO DO PROBLEMA ---
+\begin{frame}
+  \frametitle{Definição do Problema}
+  \begin{center}
+      \textbf{Resolução de Sistemas em mod 2}
+  \end{center}
+  \[
+    \begin{cases} 
+      a_{11} x_1 + a_{12} x_2 + \cdots + a_{1n}x_n = b_1 & \text{(mod 2)} \\
+      a_{21} x_1 + a_{22} x_2 + \cdots + a_{2n}x_n = b_2 & \text{(mod 2)} \\
+      \vdots \\
+      a_{m1} x_1 + a_{m2} x_2 + \cdots + a_{mn}x_n = b_m & \text{(mod 2)}
+    \end{cases}
+    \]
+  \begin{itemize} 
+    \item \textbf{Objetivo:} Encontrar x que melhor soluciona a equação $Ax=b$ (mod2)
+    \item \textbf{Metodologia}
+    \begin{itemize}
+        \item Definir uma função objetivo $f(x)$ que favorece soluções que satisfazem mais equações
+        \item Aplicar o Algoritmo DQI
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{Definição da Função Objetivo}
+
+% --- SLIDE DEFINIÇÃO DA FUNÇÃO OBJETIVO ---
+\begin{frame}
+  \frametitle{Definição da Função Objetivo}
+  
+  Para cada equação $a_i \cdot x = b_i$, associar um valor de +1 para as soluções que satisfazem a equação e -1 para as que falham.
+
+  \vspace{1cm}
+  
+  \begin{block}{Maximizar a função é equivalente a encontrar a melhor solução aproximada}
+  \[
+    f(x)=\sum_{i=1}^m (-1)^{a_i \cdot x + b_i}
+  \]
+  \end{block}
+\end{frame}
+
+\section{Algoritmo DQI}
+
+% --- SLIDE ALGORITMO DQI ---
+
+\begin{frame}
+    \frametitle{Algoritmo DQI}
+
+    \textbf{Passos do Algoritmo de Intereformetria Quântica Decodificada (DQI)}
+
+    \vspace{2cm}
+
+    \begin{enumerate}
+        \item Preparação do Estado Inicial
+            \begin{itemize}
+                \item Criação de Superposição Uniforme
+            \end{itemize}
+        \item Codificação da Função Objetivo na Fase
+            \begin{itemize}
+                \item Aplicar efeito da Função Objetivo
+            \end{itemize}
+        \item Aplicação da Transformada Quântica de Fourier (QFT)
+            \begin{itemize}
+                \item Causa interferência construtiva para favorecer as soluções desejadas
+            \end{itemize}
+        \item Medição e Decodificação Clássica
+            \begin{itemize}
+                \item Leitura da Superposição e interpretação clássica
+            \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% --- SLIDE PREPARAÇÃO DO ESTADO INICIAL ---
+
+\section{Preparação do Estado Inicial}
+
+\begin{frame}
+    \frametitle{Preparação do Estado Inicial}
+
+    \textbf{Criação de Estado de Superposição Uniforme de todos os $2^n$ Estados possíveis para o vetor de variáveis x}
+
+    \vspace{2cm}
+
+    Aplicando Hadamard a $n$ qubits no estado $\ket{0}$, resulta em:
+
+    \[
+        \ket{\psi_0}=\frac{1}{2^n} \sum_{x\in\{0,1\}^n}\ket{x}
+    \]
+\end{frame}
+
+% --- SLIDE CODIFICAÇÂO DA FUNÇÃO OBJETIVO NA FASE ---
+
+\section{Codificação da Função Objetivo na Fase}
+
+\begin{frame}
+    \frametitle{Codificação da Função Objetivo na Fase}
+
+    \[
+        \ket{\psi_P}=N \sum_{x\in\{0,1\}^n}P(f(x))\ket{x}
+    \]
+
+    \begin{block}{Transformação com o Polinômio Objetivo}
+        \begin{itemize}
+            \item \textbf{N:} Constante de Normalização
+            \item \textbf{P(f(x)):} Polinômio da Função Objetivo
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+
+
+
+
+
+\end{document}
