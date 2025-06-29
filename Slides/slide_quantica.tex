@@ -4,9 +4,42 @@
 \usepackage[brazil]{babel}
 \usepackage{lmodern}
 \usepackage{braket}
+\usepackage{bookmark}
+\usepackage{listings}
+\usepackage{xcolor} % Necessário para usar cores
+\usepackage{verbatim} % Necessário para usar cores
+\usepackage{hyperref} % Essencial para URLs clicáveis e seguras
+
 
 % --- USE O TEMA QUANTUM ---
 \usetheme{Quantum}
+
+% \lstset{
+%   backgroundcolor=\color{lightgray!20},   % Cor de fundo
+%   basicstyle=\ttfamily\small,            % Estilo da fonte (monospaçada e pequena)
+%   commentstyle=\color{green!60!black},    % Cor dos comentários
+%   keywordstyle=\color{blue},             % Cor das palavras-chave
+%   numberstyle=\tiny\color{gray},         % Estilo dos números de linha
+%   stringstyle=\color{purple},            % Cor das strings
+%   breaklines=true,                       % Quebrar linhas longas
+%   breakatwhitespace=true,                % Quebrar linhas apenas em espaços
+%   captionpos=b,                          % Posição da legenda (b=bottom)
+%   keepspaces=true,                       % Manter espaços no código
+%   numbers=left,                          % Onde colocar os números de linha (left, right, none)
+%   numbersep=5pt,                         % Distância dos números até o código
+%   showspaces=false,                      % Não mostrar espaços
+%   showstringspaces=false,                % Não mostrar espaços dentro de strings
+%   showtabs=false,                        % Não mostrar tabs
+%   tabsize=2                              % Tamanho da tabulação
+% }
+
+% \hypersetup{
+%     colorlinks=true,
+%     linkcolor=blue,
+%     filecolor=magenta,      
+%     urlcolor=blue, % Deixa as URLs azuis e clicáveis
+%     pdftitle={Referências},
+% }
 
 % --- INFORMAÇÕES DA APRESENTAÇÃO ---
 \title{Otimização de funções em módulo 2 utilizando DQI}
@@ -167,7 +200,7 @@
 % --- SLIDE PREPARAÇÃO DO ESTADO INICIAL ---
 \subsection{Preparação do Estado Inicial}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Preparação do Estado Inicial}
 
   Criação de estado de \textbf{Superposição Uniforme} de todos os $2^n$ estados possíveis para o vetor $x$ de variáveis.
@@ -181,6 +214,14 @@
     \ket{\psi_0}=\frac{1}{2^n} \sum_{x\in\{0,1\}^n}\ket{x}
   \]
   \end{block}
+
+  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
+def preparar_estado_inicial(qubits):
+    return cirq.Circuit(cirq.H.on_each(qubits))
+  \end{lstlisting}
+  \end{block}
+
 \end{frame}
 
 % --- SLIDE CODIFICAÇÂO DA FUNÇÃO OBJETIVO NA FASE ---
@@ -206,6 +247,51 @@
 
   TODO: explicar o polinômio da Func obj
 \end{frame}
+
+\begin{frame}[fragile]
+  
+  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
+def create_phase_oracle(x_qubits, B_mat, v_vec):
+    n_vars = len(x_qubits)
+    m_eqs = len(v_vec)
+    y_qubits = [cirq.NamedQubit(f'y_{i}') for i in range(m_eqs)]
+    phase_qubit = cirq.NamedQubit('phase_ancilla')
+    
+    compute_Bx = [cirq.CNOT(x_qubits[j], y_qubits[i]) for i in range(m_eqs) for j in range(n_vars) \
+                                                                                    if B_mat[i, j] == 1]
+    flip_to_target = [cirq.X(q) for i, q in enumerate(y_qubits) if v_vec[i] == 0]
+    apply_phase = [
+        cirq.X(phase_qubit), cirq.H(phase_qubit),
+        cirq.X(phase_qubit).controlled_by(*y_qubits),
+        cirq.H(phase_qubit), cirq.X(phase_qubit)
+    ]
+    return cirq.Circuit(compute_Bx, flip_to_target, apply_phase, list(reversed(flip_to_target)), \
+                                                                             list(reversed(compute_Bx)))
+  \end{lstlisting}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+  
+  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
+def create_diffusion_operator(x_qubits):
+    circuit = cirq.Circuit()
+    circuit.append(cirq.H.on_each(x_qubits))
+    circuit.append(cirq.X.on_each(x_qubits))
+    if len(x_qubits) > 1:
+      circuit.append(cirq.Z(x_qubits[-1]).controlled_by(*x_qubits[:-1]))
+    elif len(x_qubits) == 1:
+      circuit.append(cirq.Z(x_qubits[0]))
+    circuit.append(cirq.X.on_each(x_qubits))
+    circuit.append(cirq.H.on_each(x_qubits))
+    return circuit
+  \end{lstlisting}
+  \end{block}
+\end{frame}
+
+
 
 \subsection{Tranformada Quântica de Fourier}
 \begin{frame}
@@ -245,14 +331,14 @@
 \end{frame}
 
 \subsection{Decodificação Clássica}
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Decodificação Clássica}
 
   A última etapa consiste utilizar de um algoritmo de decodificação clássica com os parâmetros $y$, a síndrome, e $f$, a função objetivo para inferir a solução ótima (ou \textit{quase ótima}) $x$.
 
   \vfill
 
-  Usamos o TODO:
+  TODO: qual decoder utilizamos?
 
 \end{frame}
 
@@ -267,6 +353,31 @@
 \section{Considerações Finais}
 \begin{frame}
   \frametitle{Considerações Finais}
+  
+  \begin{itemize}
+    \item O DQI resolve um problema que pode ser resolvido com um computador clássico!
+    \item Ele é direcionado a problemas como o max-XORSAT com batrizes $A$ esparsas, que se reduzem à problemas de decodificação.
+    \item Segundo TODO:, Em uma instância de exemplo com 31.216 variáveis e 50.000 restrições, o DQI alcançou 83,5\% de restrições satisfeitas, enquanto o simulated annealing (heurística) obteve 81,5\%. Outras heurísticas como o algoritmo AdvRand (55,4\%) também foram superadas.
+    \item Caso de uso bastante restrito!
+  \end{itemize}
+  
+\end{frame}
+
+\section{Referências Bibliográficas}
+
+\begin{frame}[fragile]
+  \frametitle{Referências Bibliográficas}
+  
+  \begin{enumerate}
+    \footnotesize
+    \item BARTSCHI, A.; EIDENBENZ, S.. Deterministic Preparation of Dicke States. \textit{arXiv (Cornell University)}, 15 ago. 2024.
+    \item CLASSIQ TECHNOLOGIES. \textit{Decoded Quantum Interferometry Algorithm - Classiq}. Disponível em: \url{https://docs.classiq.io/latest/explore/algorithms/dqi/dqi_max_xorsat/}. Acesso em: 29 jun. 2025.
+    \item HARI. Linear Block Codes: Encoding and Syndrome Decoding. \textit{MIT - Lecture Notes}. Disponível em \url{https://web.mit.edu/6.02/www/s2012/handouts/6.pdf}. Acesso em: 29 jun. 2025.
+    \item JORDAN, S. \textit{Quantum Algorithm Zoo}. Disponível em: \url{https://quantumalgorithmzoo.org/#JSW24}. Acesso em: 29 jun. 2025.
+    \item JORDAN, S. P. et al. Optimization by Decoded Quantum Interferometry. \textit{arXiv (Cornell University)}, 15 ago. 2024.
+    \item SCHMIDHUBER, A. et al. Quartic quantum speedups for planted inference. \textit{arXiv (Cornell University)}, 27 jun. 2024.
+    \item YAMAKAWA, T.; ZHANDRY, M. Verifiable Quantum Advantage without Structure. \textit{arXiv (Cornell University)}, 5 abr. 2022.
+  \end{enumerate}
   
 \end{frame}
 
