@@ -28,15 +28,30 @@
   \tableofcontents
 \end{frame}
 
-\section{Definição do Problema}
-
-% --- SLIDE DEFINIÇÃO DO PROBLEMA ---
+\section{Entendimento do Problema}
 \begin{frame}
-  \frametitle{Definição do Problema}
+  \frametitle{O Problema max-XORSAT}
+
+  O é max-XORSAT? Traduzindo, significa :
   \begin{center}
-      \textbf{Resolução de Sistemas em mod 2}
+    \textit{Maximizar a Satisfabilidade do XOR.}
   \end{center}
+
+  Ou seja, encontrar um string binário (ou vetor) que satisfaça o maior número possível de equações lineares em $\mod 2$.
+
+\end{frame}
+
+% --- SLIDE DEFINIÇÃO DA FUNÇÃO OBJETIVO ---
+\section{Definição da Função Objetivo}
+\begin{frame}
+  \frametitle{Definição da Função Objetivo}
+  \begin{itemize}
+    \item Como maximizar o número de equações satisfeitas?
+  \end{itemize}
+  Ora, um sistema linear em módulo 2 é da forma:
   \[
+  Ax=b \mod2
+  \longleftrightarrow
     \begin{cases} 
       a_{11} x_1 + a_{12} x_2 + \cdots + a_{1n}x_n = b_1 & \text{(mod 2)} \\
       a_{21} x_1 + a_{22} x_2 + \cdots + a_{2n}x_n = b_2 & \text{(mod 2)} \\
@@ -44,57 +59,92 @@
       a_{m1} x_1 + a_{m2} x_2 + \cdots + a_{mn}x_n = b_m & \text{(mod 2)}
     \end{cases}
     \]
-  \begin{itemize} 
-    \item \textbf{Objetivo:} Encontrar x que melhor soluciona a equação $Ax=b$ (mod2)
-    \item \textbf{Metodologia}
-    \begin{itemize}
-        \item Definir uma função objetivo $f(x)$ que favorece soluções que satisfazem mais equações
-        \item Aplicar o Algoritmo DQI
-    \end{itemize}
-  \end{itemize}
+  
+  Para a função objetivo, definimos o resultado intermediário para cada linha como
+  $$
+  \begin{cases}
+    1, & \text{se } a_i\cdot x = b_i \\
+    -1, & \text{se } a_i\cdot x \neq b_i \\
+  \end{cases}
+  $$
 \end{frame}
 
-\section{Definição da Função Objetivo}
-
-% --- SLIDE DEFINIÇÃO DA FUNÇÃO OBJETIVO ---
 \begin{frame}
   \frametitle{Definição da Função Objetivo}
-  
-  Para cada equação $a_i \cdot x = b_i$, associar um valor de +1 para as soluções que satisfazem a equação e -1 para as que falham.
-
-  \vspace{1cm}
-  
-  \begin{block}{Maximizar a função é equivalente a encontrar a melhor solução aproximada}
+  Voltando ao problema max-XORSAT, a função objetivo $f(x)$ é, então, o somatório dos resultados intemediários:
   \[
     f(x)=\sum_{i=1}^m (-1)^{a_i \cdot x + b_i}
   \]
+
+  \vfill
+  \begin{block}{Ideia Geral da Func. Objetivo}
+    Essa função objetivo conta o número de equações cuja escolha de $x$ satisfaz e subtrai o número de equações que não satisfazem.
   \end{block}
 \end{frame}
 
+% --- SLIDE DEFINIÇÃO DO PROBLEMA ---
+\section{Definição do Problema}
+\begin{frame}
+  \frametitle{Definição do Problema}
+    \textbf{Entrada:} Um sistema linear na forma de:
+    \begin{itemize}
+      \item Uma matriz $A \in \mathbb{F}_2^{m \times n}$; e
+      \item Um vetor $b \in \mathbb{F}_2^m$ com $m > n$.
+    \end{itemize}
+    \vfill
+    \textbf{Saída:} Um vetor $x \in \mathbb{F}_2^n$ que melhor maximiza $f$, definida adiante.
+  \vfill
+  \begin{block}{O Problema max-XORSAT}
+  \begin{itemize} 
+    \item \textbf{Objetivo:} Encontrar x que \textit{melhor soluciona} a equação $Ax=b \mod2$.
+    \item \textbf{Metodologia}
+    \begin{itemize}
+        \item Definir uma função objetivo $f(x)$ para \textit{melhor soluciona}. \checkmark
+        \item Aplicar o Algoritmo de Interferometria Quântica Decodificada (DQI).
+    \end{itemize}
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Por que usar o DQI?}
+\begin{frame}
+  \frametitle{Por que usar o DQI?}
+  O problema Max-XORSAT é classificado como \textbf{NP-difícil}!
+
+  \vfill
+  \begin{block}{Vantagens do DQI}
+    \begin{itemize}
+      \item O DQI foca em encontrar soluções \textit{aproximadas}.
+      \item A estratégia é reduzir uum problema de ptimização a um problema de decodificação usando a \textit{Transformada de Fourier Quântica}.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
 \section{Algoritmo DQI}
-
 % --- SLIDE ALGORITMO DQI ---
-
 \begin{frame}
     \frametitle{Algoritmo DQI}
 
-    \textbf{Passos do Algoritmo de Intereformetria Quântica Decodificada (DQI)}
-
-    \vspace{2cm}
+    \textbf{Passos do Algoritmo de Intereformetria Quântica Decodificada (DQI):}
+    \vfill
 
     \begin{enumerate}
         \item Preparação do Estado Inicial
             \begin{itemize}
                 \item Criação de Superposição Uniforme
             \end{itemize}
+        \vfill
         \item Codificação da Função Objetivo na Fase
             \begin{itemize}
                 \item Aplicar efeito da Função Objetivo
             \end{itemize}
+        \vfill
         \item Aplicação da Transformada Quântica de Fourier (QFT)
             \begin{itemize}
                 \item Causa interferência construtiva para favorecer as soluções desejadas
             \end{itemize}
+        \vfill
         \item Medição e Decodificação Clássica
             \begin{itemize}
                 \item Leitura da Superposição e interpretação clássica
@@ -102,46 +152,122 @@
     \end{enumerate}
 \end{frame}
 
-% --- SLIDE PREPARAÇÃO DO ESTADO INICIAL ---
+\subsection{Circuito do DQI}
+\begin{frame}
+  \frametitle{Algoritmo DQI}
 
-\section{Preparação do Estado Inicial}
+  \textbf{Circuito Quântico:}
+
+  TODO: Adicionar figura do circuito.
+  % \begin{figure}
+    
+  % \end{figure}
+\end{frame}
+
+% --- SLIDE PREPARAÇÃO DO ESTADO INICIAL ---
+\subsection{Preparação do Estado Inicial}
 
 \begin{frame}
-    \frametitle{Preparação do Estado Inicial}
+  \frametitle{Preparação do Estado Inicial}
 
-    \textbf{Criação de Estado de Superposição Uniforme de todos os $2^n$ Estados possíveis para o vetor de variáveis x}
+  Criação de estado de \textbf{Superposição Uniforme} de todos os $2^n$ estados possíveis para o vetor $x$ de variáveis.
+  Isso é feito aplicando Hadamard em todos os registros.
 
-    \vspace{2cm}
+  \vfill
 
-    Aplicando Hadamard a $n$ qubits no estado $\ket{0}$, resulta em:
-
-    \[
-        \ket{\psi_0}=\frac{1}{2^n} \sum_{x\in\{0,1\}^n}\ket{x}
-    \]
+  \begin{block}{Resultado da 1ª Etapa}
+  Aplicando Hadamard a $n$ qubits no estado $\ket{0}$, resulta em:
+  \[
+    \ket{\psi_0}=\frac{1}{2^n} \sum_{x\in\{0,1\}^n}\ket{x}
+  \]
+  \end{block}
 \end{frame}
 
 % --- SLIDE CODIFICAÇÂO DA FUNÇÃO OBJETIVO NA FASE ---
-
-\section{Codificação da Função Objetivo na Fase}
+\subsection{Codificação da Função Objetivo na Fase}
 
 \begin{frame}
-    \frametitle{Codificação da Função Objetivo na Fase}
+  Nessa etapa, a função objetivo é incorporada na \textit{fase} estado quântico. 
 
-    \[
-        \ket{\psi_P}=N \sum_{x\in\{0,1\}^n}P(f(x))\ket{x}
-    \]
+  \vfill
 
-    \begin{block}{Transformação com o Polinômio Objetivo}
-        \begin{itemize}
-            \item \textbf{N:} Constante de Normalização
-            \item \textbf{P(f(x)):} Polinômio da Função Objetivo
-        \end{itemize}
-    \end{block}
+  Isso é feito através de um polinômio $P(f(x))$ da função objetivo, em que $P(f(x))\ket{x}$ é proporcional a amplitude do estado.
+
+  \frametitle{Codificação da Função Objetivo na Fase}
+  \[
+      \ket{\psi_P}=N \sum_{x\in\{0,1\}^n}P(f(x))\ket{x}
+  \]
+  \begin{block}{Transformação com o Polinômio Objetivo}
+      \begin{itemize}
+          \item $N$ é a constante de normalização; e
+          \item $P(f(x))$ é o polinômio da função objetivo.
+      \end{itemize}
+  \end{block}
+
+  TODO: explicar o polinômio da Func obj
 \end{frame}
 
+\subsection{Tranformada Quântica de Fourier}
+\begin{frame}
+  \frametitle{Tranformada Quântica de Fourier}
 
+  Nessa etapa, aplicamos a QFT em $|\psi_P\rangle$. 
+  \vfill
+  \textit{Fisicamente}, a QFT causa uma interferência construtiva nas amplitudes dos estados que correspondem às características importantes da função objetivo. 
+  Nossa função objetivo possui seu espectro de Fourier \textbf{esparso} (i.e., a informação está concentrada em poucos coeficientes de Fourier: $N$ ou $-N$). TODO: confirmar se N*P(f(x)) = N ou -N
+  
+  \begin{block}{Relembrando a QFT}
+    A QFT de $n$-qubits atua em um estado da base $|\mathbf{x}\rangle$ da seguinte forma:
+    $$
+    \text{QFT}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}} \sum_{\mathbf{y} \in \{0,1\}^n} (-1)^{\mathbf{x} \cdot \mathbf{y}} |\mathbf{y}\rangle
+    $$
+  \end{block}
+\end{frame}
 
+\subsection{Medição}
+\begin{frame}
+  \frametitle{Medição}
 
+  Após a aplicação da QFT, é aplicada a \textbf{medição}! 
+  \vfill
+  Ela resulta em uma string de bits $y$, que não é a solução $x$. 
+  Na verdade, ela é a \textit{síndrome} de um código de correção de erros de paridade de baixa densidade (LDPC).
+  TODO: porque?
+  
+  \vfill
+  \begin{block}{Códigos de Verificação de Paridade de Baixa Densidade (LDPC)}
+    Classe de Códigos de Correção de Erros lineares definidos por uma matriz de checagem de paridade que contém poucos 1s em relação aos 0s.
+  \end{block}
 
+  \begin{block}{Síndrome}
+    Significa dizer que os bits de $y$ contém informações sobre as relações entre os bits da solução ótima $x$. Indicam quais verificações de paridade falharam.
+  \end{block}
+\end{frame}
+
+\subsection{Decodificação Clássica}
+\begin{frame}
+  \frametitle{Decodificação Clássica}
+
+  A última etapa consiste utilizar de um algoritmo de decodificação clássica com os parâmetros $y$, a síndrome, e $f$, a função objetivo para inferir a solução ótima (ou \textit{quase ótima}) $x$.
+
+  \vfill
+
+  Usamos o TODO:
+
+\end{frame}
+
+\section{DQI em Ação}
+\begin{frame}
+  \frametitle{DQI em Ação}
+
+  TODO: adicionar o gif
+  
+\end{frame}
+
+\section{Considerações Finais}
+\begin{frame}
+  \frametitle{Considerações Finais}
+  
+\end{frame}
 
 \end{document}
