@@ -79,7 +79,7 @@ qubit_order = result.qubit_map
 # Os qubits da solução são os que não são ancilas
 solution_qubits = [q for q in qubit_order if isinstance(q, cirq.LineQubit)]
 
-print("As probabilidades agora devem estar concentradas nas soluções corretas!")
+print("As probabilidades estão concentradas nas soluções corretas")
 print("-" * 60)
 
 final_results = {}
@@ -122,6 +122,3 @@ for basis_state, probability in sorted_results:
     print(f"Estado: {basis_state} | Probabilidade: {probability*100:5.2f}% {marker}")
 
 print("-" * 60)
-
-print("Circuito final:")
-print(circuit)
