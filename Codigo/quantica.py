@@ -3,8 +3,8 @@ import numpy as np
 import math
 
 # --- 1. DEFINIÇÃO DO PROBLEMA ---
-B = np.array([[1, 1, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]])
-v = np.array([1, 1, 0])
+B = np.array([[1, 1, 0, 1], [0, 1, 0, 1], [1, 0, 1, 0]])
+v = np.array([1, 0, 1])
 n_qubits = B.shape[1]
 m_qubits = B.shape[0]
 
@@ -56,7 +56,6 @@ if M == 0:
     k = 0
 else:
     k = int((math.pi / 4) * math.sqrt(N / M))
-
 
 print(f"--- Construindo o circuito final com {k} iteração(ões) de amplificação ---")
 
@@ -122,3 +121,5 @@ for basis_state, probability in sorted_results:
     print(f"Estado: {basis_state} | Probabilidade: {probability*100:5.2f}% {marker}")
 
 print("-" * 60)
+
+#print (cirq.qasm(circuit))

@@ -1,0 +1,13 @@
+# This file is used internally by FFMPEG.
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/3028389898_1244928363_3365606404.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_4145679627_1550007402.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_2631580503_2598363999.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_3106649663_317091685.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_575930711_3805607114.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_789064381_1890558235.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_789064381_3093871174.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_1333255116_2029601021.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_3064948334_327544444.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_789064381_4013237665.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_4164239419_1525369489.mp4'
+file 'file:D:/Rafael/Documents/Faculdade/Computação Quântica/DQI_Algorithm/Codigo/media/videos/animacao_esfera/480p15/partial_movie_files/PhaseOracleOnBlochSphere/99950615_1270709681_1076992254.mp4'
