@@ -129,10 +129,10 @@
   \vfill
   \begin{block}{O Problema max-XORSAT}
   \begin{itemize} 
-    \item \textbf{Objetivo:} Encontrar x que \textit{melhor soluciona} a equação $Ax=b \mod2$.
+    \item \textbf{Objetivo:} Encontrar x que melhor soluciona a equação $Ax=b \mod2$.
     \item \textbf{Metodologia}
     \begin{itemize}
-        \item Definir uma função objetivo $f(x)$ para \textit{melhor soluciona}. \checkmark
+        \item Definir uma função objetivo $f(x)$.
         \item Aplicar o Algoritmo de Interferometria Quântica Decodificada (DQI).
     \end{itemize}
   \end{itemize}
@@ -148,7 +148,7 @@
   \begin{block}{Vantagens do DQI}
     \begin{itemize}
       \item O DQI foca em encontrar soluções \textit{aproximadas}.
-      \item A estratégia é reduzir uum problema de ptimização a um problema de decodificação usando a \textit{Transformada de Fourier Quântica}.
+      \item A estratégia é reduzir um problema de otimização a um problema de decodificação usando a \textit{Transformada de Fourier Quântica (QFT)}.
     \end{itemize}
   \end{block}
 \end{frame}
@@ -168,7 +168,7 @@
                 \item Criação de Superposição Uniforme
             \end{itemize}
         \vfill
-        \item Codificação da Função Objetivo na Fase
+        \item Codificação da Função Objetivo na Fase (Oráculo)
             \begin{itemize}
                 \item Aplicar efeito da Função Objetivo
             \end{itemize}
@@ -191,7 +191,9 @@
 
   \textbf{Circuito Quântico:}
 
-  TODO: Adicionar figura do circuito.
+  \vspace{1cm}
+
+  \includegraphics[scale=0.5]{circuito.png}
   % \begin{figure}
     
   % \end{figure}
@@ -215,7 +217,7 @@
   \]
   \end{block}
 
-  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{block}{Implementação no Simulador Python \lstinline|cirq|}
   \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
 def preparar_estado_inicial(qubits):
     return cirq.Circuit(cirq.H.on_each(qubits))
@@ -244,13 +246,11 @@ def preparar_estado_inicial(qubits):
           \item $P(f(x))$ é o polinômio da função objetivo.
       \end{itemize}
   \end{block}
-
-  TODO: explicar o polinômio da Func obj
 \end{frame}
 
 \begin{frame}[fragile]
   
-  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{block}{Implementação no Simulador Python \lstinline|cirq|}
   \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
 def create_phase_oracle(x_qubits, B_mat, v_vec):
     n_vars = len(x_qubits)
@@ -272,9 +272,26 @@ def create_phase_oracle(x_qubits, B_mat, v_vec):
   \end{block}
 \end{frame}
 
+\subsection{Tranformada Quântica de Fourier}
+\begin{frame}
+  \frametitle{Tranformada Quântica de Fourier}
+
+  Nessa etapa, aplicamos a QFT em $|\psi_P\rangle$. 
+  \vfill
+  \textit{Fisicamente}, a QFT causa uma interferência construtiva nas amplitudes dos estados que correspondem às características importantes da função objetivo. 
+  Nossa função objetivo possui seu espectro de Fourier \textbf{esparso} (i.e., a informação está concentrada em poucos coeficientes de Fourier: $N$ ou $-N$).
+  
+  \begin{block}{Relembrando a QFT}
+    A QFT de $n$-qubits atua em um estado da base $|\mathbf{x}\rangle$ da seguinte forma:
+    $$
+    \text{QFT}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}} \sum_{\mathbf{y} \in \{0,1\}^n} (-1)^{\mathbf{x} \cdot \mathbf{y}} |\mathbf{y}\rangle
+    $$
+  \end{block}
+\end{frame}
+
 \begin{frame}[fragile]
   
-  \begin{block}{Implementação no Simulador Python \lstinline|circ|}
+  \begin{block}{Implementação no Simulador Python \lstinline|cirq|}
   \begin{lstlisting}[language=Python, frame=single, basicstyle=\tiny]
 def create_diffusion_operator(x_qubits):
     circuit = cirq.Circuit()
@@ -291,54 +308,15 @@ def create_diffusion_operator(x_qubits):
   \end{block}
 \end{frame}
 
-
-
-\subsection{Tranformada Quântica de Fourier}
-\begin{frame}
-  \frametitle{Tranformada Quântica de Fourier}
-
-  Nessa etapa, aplicamos a QFT em $|\psi_P\rangle$. 
-  \vfill
-  \textit{Fisicamente}, a QFT causa uma interferência construtiva nas amplitudes dos estados que correspondem às características importantes da função objetivo. 
-  Nossa função objetivo possui seu espectro de Fourier \textbf{esparso} (i.e., a informação está concentrada em poucos coeficientes de Fourier: $N$ ou $-N$). TODO: confirmar se N*P(f(x)) = N ou -N
-  
-  \begin{block}{Relembrando a QFT}
-    A QFT de $n$-qubits atua em um estado da base $|\mathbf{x}\rangle$ da seguinte forma:
-    $$
-    \text{QFT}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}} \sum_{\mathbf{y} \in \{0,1\}^n} (-1)^{\mathbf{x} \cdot \mathbf{y}} |\mathbf{y}\rangle
-    $$
-  \end{block}
-\end{frame}
-
 \subsection{Medição}
 \begin{frame}
   \frametitle{Medição}
 
   Após a aplicação da QFT, é aplicada a \textbf{medição}! 
-  \vfill
-  Ela resulta em uma string de bits $y$, que não é a solução $x$. 
-  Na verdade, ela é a \textit{síndrome} de um código de correção de erros de paridade de baixa densidade (LDPC).
-  TODO: porque?
+
+    \vspace{1cm}
   
-  \vfill
-  \begin{block}{Códigos de Verificação de Paridade de Baixa Densidade (LDPC)}
-    Classe de Códigos de Correção de Erros lineares definidos por uma matriz de checagem de paridade que contém poucos 1s em relação aos 0s.
-  \end{block}
-
-  \begin{block}{Síndrome}
-    Significa dizer que os bits de $y$ contém informações sobre as relações entre os bits da solução ótima $x$. Indicam quais verificações de paridade falharam.
-  \end{block}
-\end{frame}
-
-\subsection{Decodificação Clássica}
-\begin{frame}[fragile]
-  \frametitle{Decodificação Clássica}
-
-  A última etapa consiste utilizar de um algoritmo de decodificação clássica com os parâmetros $y$, a síndrome, e $f$, a função objetivo para inferir a solução ótima (ou \textit{quase ótima}) $x$.
-
-  \vfill
-
-  TODO: qual decoder utilizamos?
+  A medição é a etapa na qual é realizada a leitura dos qubits e interpretado para sua identificação do vetor $x$ desejado 
 
 \end{frame}
 
@@ -346,7 +324,7 @@ def create_diffusion_operator(x_qubits):
 \begin{frame}
   \frametitle{DQI em Ação}
 
-  TODO: adicionar o gif
+  Hora do vídeo!
   
 \end{frame}
 
@@ -355,9 +333,9 @@ def create_diffusion_operator(x_qubits):
   \frametitle{Considerações Finais}
   
   \begin{itemize}
-    \item O DQI resolve um problema que pode ser resolvido com um computador clássico!
-    \item Ele é direcionado a problemas como o max-XORSAT com batrizes $A$ esparsas, que se reduzem à problemas de decodificação.
-    \item Segundo TODO:, Em uma instância de exemplo com 31.216 variáveis e 50.000 restrições, o DQI alcançou 83,5\% de restrições satisfeitas, enquanto o simulated annealing (heurística) obteve 81,5\%. Outras heurísticas como o algoritmo AdvRand (55,4\%) também foram superadas.
+    \item O DQI acha uma boa aproximação para um problema que é originalmente NP-Difícil!
+    \item Ele é direcionado a problemas como o max-XORSAT com matrizes $A$ esparsas, que se reduzem a problemas de decodificação.
+    \item Em uma instância de exemplo com 31.216 variáveis e 50.000 restrições, o DQI alcançou 83,5\% de restrições satisfeitas, enquanto o simulated annealing (heurística) obteve 81,5\%. Outras heurísticas como o algoritmo AdvRand (55,4\%) também foram superadas.
     \item Caso de uso bastante restrito!
   \end{itemize}
   

@@ -3,8 +3,8 @@ import numpy as np
 import math
 
 # --- 1. DEFINIÇÃO DO PROBLEMA ---
-B = np.array([[1, 1, 0, 1], [0, 1, 0, 1], [1, 0, 1, 0]])
-v = np.array([1, 0, 1])
+B = np.array([[1, 0], [0, 1]])
+v = np.array([1, 0])
 n_qubits = B.shape[1]
 m_qubits = B.shape[0]
 
@@ -122,4 +122,4 @@ for basis_state, probability in sorted_results:
 
 print("-" * 60)
 
-#print (cirq.qasm(circuit))
+print (cirq.qasm(circuit))

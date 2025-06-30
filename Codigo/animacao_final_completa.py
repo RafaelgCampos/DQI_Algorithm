@@ -76,12 +76,8 @@ class GroverFullAlgorithmViz(Scene):
             end=barchart.coords_to_point(barchart.x_axis.x_max, mean_val),
             color=YELLOW
         )
-        mean_label = Tex("Média", font_size=24, color=YELLOW).next_to(mean_line, LEFT, buff=0.1)
         
-        self.play(Create(mean_line), Write(mean_label))
-        self.wait(1.5)
-
-        amplified_amplitudes = (mean_val + (mean_val - oracle_amplitudes)) / 2
+        amplified_amplitudes = (mean_val + (mean_val - oracle_amplitudes)) / 1.7
         
         # Cria o gráfico final da transformação
         amplified_barchart_target = create_chart(amplified_amplitudes)
@@ -94,8 +90,6 @@ class GroverFullAlgorithmViz(Scene):
         # Anima a transformação do gráfico do oráculo para o gráfico final
         self.play(
             Transform(barchart, amplified_barchart_target),
-            FadeOut(mean_line), 
-            FadeOut(mean_label),
             run_time=2.5
         )
         
